@@ -393,7 +393,7 @@ phases.forEach((p,i)=>{const el=document.createElement('div');el.className='phas
 
 // MUSIC — local audio
 const bgm=document.getElementById('bgmAudio'),mt=document.getElementById('musicToggle');let mp=false;
-bgm.src='./bgm.mp3';bgm.volume=0.45;bgm.loop=true;
+bgm.src='./bgm.m4a';bgm.volume=0.45;bgm.loop=true;
 async function play(){try{await bgm.play();mp=true;mt.classList.add('playing')}catch(e){}}
 play();
 function wake(){if(!mp){play();if(mp){document.removeEventListener('click',wake);document.removeEventListener('scroll',wake)}}}
