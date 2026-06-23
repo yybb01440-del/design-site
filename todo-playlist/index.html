@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Earth Online Quest Deck</title>
+    <link rel="icon" href="./assets/pixel-earth.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="scene-mode">
+    <div class="app-shell">
+      <div class="scene-hotspots" aria-label="场景交互">
+        <button class="hotspot hotspot-player" type="button" data-open-view="player" aria-label="查看玩家状态"></button>
+        <button class="hotspot hotspot-board" type="button" data-open-view="quests" aria-label="打开任务板"></button>
+        <button class="hotspot hotspot-tomato" type="button" data-open-view="focus" aria-label="打开番茄钟"></button>
+        <button class="hotspot hotspot-radio" type="button" data-open-view="playlist" aria-label="打开播放列表"></button>
+      </div>
+      <div class="player-avatar" aria-hidden="true"></div>
+      <button class="scene-modal-close" id="closeViewBtn" type="button" aria-label="关闭界面">×</button>
+      <header class="topbar">
+        <div class="brand">
+          <img src="./assets/pixel-earth.svg" alt="" class="brand-orbit" />
+          <div>
+            <p class="eyebrow">EARTH ONLINE</p>
+            <h1>Quest Deck</h1>
+          </div>
+        </div>
+        <div class="player-strip" aria-label="玩家状态">
+          <div class="stat">
+            <span>Lv</span>
+            <strong id="level">1</strong>
+          </div>
+          <div class="stat wide">
+            <span>XP</span>
+            <div class="meter" aria-label="经验值">
+              <div id="xpFill"></div>
+            </div>
+            <strong id="xpText">0 / 120</strong>
+          </div>
+          <div class="stat coin">
+            <span>金币</span>
+            <strong id="coins">0</strong>
+          </div>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <section class="panel quests-panel" aria-labelledby="questsTitle">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">TODAY BOARD</p>
+              <h2 id="questsTitle"><span class="prop prop-scroll" aria-hidden="true"></span>任务与习惯</h2>
+            </div>
+            <button class="icon-btn" id="resetDayBtn" type="button" title="刷新今日副本" aria-label="刷新今日副本">↻</button>
+          </div>
+
+          <form class="quest-form" id="questForm">
+            <label>
+              <span>任务名</span>
+              <input id="taskTitle" type="text" placeholder="例如：写完方案第一版" autocomplete="off" required />
+            </label>
+            <div class="form-grid">
+              <label>
+                <span>类型</span>
+                <select id="taskType">
+                  <option value="todo">一次任务</option>
+                  <option value="habit">养成习惯</option>
+                  <option value="deep">深度任务</option>
+                </select>
+              </label>
+              <label>
+                <span>间隔天数</span>
+                <input id="taskInterval" type="number" min="0" max="30" value="0" />
+              </label>
+              <label>
+                <span>金币</span>
+                <input id="taskCoins" type="number" min="1" max="999" value="25" />
+              </label>
+              <label>
+                <span>番茄数</span>
+                <input id="taskPomos" type="number" min="1" max="12" value="1" />
+              </label>
+            </div>
+            <button class="primary-btn" type="submit">＋ 添加任务</button>
+          </form>
+
+          <div class="tabs" role="tablist" aria-label="任务筛选">
+            <button class="tab active" type="button" data-filter="due">今日</button>
+            <button class="tab" type="button" data-filter="all">全部</button>
+            <button class="tab" type="button" data-filter="done">已完成</button>
+          </div>
+
+          <div class="quest-list" id="questList" aria-live="polite"></div>
+        </section>
+
+        <section class="panel focus-panel" aria-labelledby="focusTitle">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">FOCUS RAID</p>
+              <h2 id="focusTitle"><span class="prop prop-tomato" aria-hidden="true"></span>番茄钟</h2>
+            </div>
+            <div class="mode-switch" aria-label="番茄模式">
+              <button class="mode active" type="button" data-mode="focus">25</button>
+              <button class="mode" type="button" data-mode="short">5</button>
+              <button class="mode" type="button" data-mode="long">15</button>
+            </div>
+          </div>
+
+          <div class="timer-stage">
+            <div class="pixel-sky" aria-hidden="true">
+              <span class="window-frame"></span>
+              <span class="sun s1"></span>
+              <span class="leaf l1"></span>
+              <span class="leaf l2"></span>
+              <span class="shelf shelf-left"></span>
+              <span class="shelf shelf-right"></span>
+              <span class="paper-note"></span>
+              <span class="plant plant-left"></span>
+              <span class="plant plant-right"></span>
+              <span class="desk"></span>
+              <span class="book-stack"></span>
+              <span class="mug"></span>
+              <span class="avatar"></span>
+            </div>
+            <div class="time" id="timer">25:00</div>
+            <p id="activeQuestLabel">选择一个任务开始本轮副本</p>
+          </div>
+
+          <label class="select-row">
+            <span>当前任务</span>
+            <select id="activeQuest"></select>
+          </label>
+
+          <div class="timer-actions">
+            <button class="primary-btn" id="startPauseBtn" type="button">▶ 开始</button>
+            <button class="ghost-btn" id="resetTimerBtn" type="button">■ 重置</button>
+            <button class="ghost-btn" id="finishPomoBtn" type="button">✓ 记录番茄</button>
+          </div>
+
+          <div class="progress-stack">
+            <div>
+              <span>今日完成番茄</span>
+              <strong id="todayPomos">0</strong>
+            </div>
+            <div>
+              <span>连续天数</span>
+              <strong id="streak">0</strong>
+            </div>
+            <div>
+              <span>下次升级</span>
+              <strong id="nextLevel">120 XP</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel playlist-panel" aria-labelledby="playlistTitle">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">BUFF RADIO</p>
+              <h2 id="playlistTitle"><span class="prop prop-cassette" aria-hidden="true"></span>Playlist</h2>
+            </div>
+            <button class="icon-btn" id="clearTrackBtn" type="button" title="清空播放列表" aria-label="清空播放列表">⌫</button>
+          </div>
+
+          <form class="track-form" id="trackForm">
+            <label>
+              <span>曲名</span>
+              <input id="trackTitle" type="text" placeholder="Lo-fi cave / boss fight BGM" autocomplete="off" required />
+            </label>
+            <label>
+              <span>音频链接</span>
+              <input id="trackUrl" type="url" placeholder="https://..." autocomplete="off" />
+            </label>
+            <button class="primary-btn" type="submit">＋ 加入播放队列</button>
+          </form>
+
+          <div class="now-playing">
+            <div>
+              <span>正在播放</span>
+              <strong id="nowPlaying">未选择</strong>
+            </div>
+            <audio id="audioPlayer" controls></audio>
+          </div>
+
+          <div class="track-list" id="trackList"></div>
+        </section>
+      </main>
+    </div>
+
+    <template id="questTemplate">
+      <article class="quest-card">
+        <button class="complete-btn" type="button" title="完成任务" aria-label="完成任务">✓</button>
+        <div class="quest-copy">
+          <div class="quest-title-row">
+            <h3></h3>
+            <span class="tag"></span>
+          </div>
+          <p></p>
+          <div class="mini-meter"><div></div></div>
+        </div>
+        <div class="quest-reward">
+          <strong></strong>
+          <button class="small-btn" type="button">设为当前</button>
+          <button class="delete-btn" type="button" title="删除任务" aria-label="删除任务">×</button>
+        </div>
+      </article>
+    </template>
+
+    <template id="trackTemplate">
+      <article class="track-card">
+        <button class="play-btn" type="button" title="播放" aria-label="播放">▶</button>
+        <div>
+          <h3></h3>
+          <p></p>
+        </div>
+        <button class="delete-btn" type="button" title="删除曲目" aria-label="删除曲目">×</button>
+      </article>
+    </template>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
