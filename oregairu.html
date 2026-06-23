@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>侍奉社 · 三人的感情线 — 我的青春恋爱物语果然有问题</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700;800&family=Noto+Serif+SC:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#17120E;--bg-2:#1E1813;--bg-3:#262019;
+  --panel:rgba(38,32,25,.55);--panel-2:rgba(46,38,29,.7);
+  --line:rgba(224,138,90,.10);--line-2:rgba(224,138,90,.22);
+  --text:#F1E8DD;--text-soft:#BAAD9C;--text-faint:#796F60;
+  --copper:#CC6B3D;--copper-bright:#E88C5A;--copper-deep:#9E4F2A;--copper-glow:rgba(224,138,90,.5);
+  --yukino:#8FA8C8;--y-light:#cfdef5;
+  --yuigahama:#E88C5A;--g-light:#f6c9a8;
+  --hachiman:#7E938C;--h-light:#c8ddd6;
+  --mincho:'Shippori Mincho','Noto Serif SC',serif;--serif:'Noto Serif SC',serif;--sans:'Noto Sans SC',-apple-system,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);-webkit-font-smoothing:antialiased;position:relative;overflow-x:hidden;cursor:default}
+#sakura-canvas{position:fixed;inset:0;z-index:2;pointer-events:none}
+.cursor-glow{position:fixed;z-index:200;pointer-events:none;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(232,140,90,.11) 0%,rgba(204,107,61,.04) 35%,transparent 70%);transform:translate(-50%,-50%);transition:opacity .4s;opacity:0}
+.cursor-glow.visible{opacity:1}
+.ambient{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.ambient-pool{position:absolute;border-radius:50%;filter:blur(140px)}
+.ambient-pool.a{width:50vw;height:50vw;background:radial-gradient(circle,rgba(204,107,61,.13) 0%,transparent 70%);top:-14vw;left:50%;transform:translateX(-50%);animation:breathe 20s ease-in-out infinite}
+.ambient-pool.b{width:38vw;height:38vw;background:radial-gradient(circle,rgba(143,168,200,.07) 0%,transparent 70%);bottom:-12vw;left:-8vw;animation:breatheB 27s ease-in-out infinite}
+.ambient-pool.c{width:32vw;height:32vw;background:radial-gradient(circle,rgba(232,140,90,.06) 0%,transparent 70%);top:40vh;right:-10vw;animation:breatheC 23s ease-in-out infinite}
+.ambient-pool.d{width:28vw;height:28vw;background:radial-gradient(circle,rgba(143,168,200,.04) 0%,transparent 70%);top:60vh;left:40%;animation:breatheD 25s ease-in-out infinite}
+@keyframes breathe{0%,100%{opacity:.6;transform:translateX(-50%) scale(1)}50%{opacity:1;transform:translateX(-50%) scale(1.08)}}
+@keyframes breatheB{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:.85;transform:scale(1.12)}}
+@keyframes breatheC{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:.8;transform:scale(1.14)}}
+@keyframes breatheD{0%,100%{opacity:.35;transform:scale(1)}50%{opacity:.7;transform:scale(1.1)}}
+.ambient::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 48%,rgba(0,0,0,.55) 100%)}
+::selection{background:rgba(204,107,61,.3);color:var(--text)}
+.topbar,.section-wrap,.toast,.graph-stage,.scene-divider{position:relative;z-index:10}
+.topbar{z-index:50}
+
+.topbar{position:sticky;top:0;background:rgba(23,18,14,.78);backdrop-filter:blur(22px) saturate(120%);-webkit-backdrop-filter:blur(22px) saturate(120%);border-bottom:1px solid var(--line);padding:0 36px;display:flex;align-items:center;height:66px;gap:20px}
+.brand{font-family:var(--mincho);font-size:17px;font-weight:600;letter-spacing:.04em;white-space:nowrap;color:var(--text)}
+.brand .jp{color:var(--copper);font-size:13px;font-weight:500}
+.brand-sub{font-family:var(--sans);font-weight:300;font-size:11px;color:var(--text-faint);letter-spacing:.06em;margin-left:auto;white-space:nowrap}
+
+.hero{max-width:900px;margin:0 auto;padding:48px 32px 8px;text-align:center;position:relative;z-index:10}
+.hero-eyebrow{font-family:var(--mincho);font-size:17px;font-weight:500;letter-spacing:.16em;color:var(--copper);margin-bottom:22px;text-shadow:0 0 18px rgba(204,107,61,.3)}
+.hero h1{font-family:var(--mincho);font-size:clamp(30px,5.5vw,46px);font-weight:700;line-height:1.45;letter-spacing:.02em;margin-bottom:18px;display:inline-block;text-shadow:0 1px 0 #7a3e28,0 2px 0 #6a3420,0 3px 0 #5a2a18,0 4px 0 #4a2212,0 5px 0 #3a1a0c,0 6px 0 #2a1208,0 8px 2px rgba(0,0,0,.5),0 12px 5px rgba(0,0,0,.35),0 18px 10px rgba(0,0,0,.2),0 0 35px var(--copper-glow),0 0 70px rgba(204,107,61,.22),0 0 120px rgba(204,107,61,.08);transform:perspective(800px) rotateX(3deg);animation:titleBreathe 8s ease-in-out 1.5s infinite}
+@keyframes titleBreathe{0%,100%{transform:perspective(800px) rotateX(3deg) translateY(0)}30%{transform:perspective(800px) rotateX(4.5deg) translateY(-3px)}70%{transform:perspective(800px) rotateX(2deg) translateY(2px)}}
+.hero h1 em{font-style:normal;color:var(--copper-bright);text-shadow:0 1px 0 #8a4530,0 2px 0 #6a3020,0 3px 0 #4a2010,0 4px 2px rgba(0,0,0,.4),0 0 22px var(--copper-glow),0 0 50px rgba(232,140,90,.5);animation:textPulse 3.5s ease-in-out infinite}
+@keyframes textPulse{0%,100%{text-shadow:0 1px 0 #8a4530,0 2px 0 #6a3020,0 3px 0 #4a2010,0 4px 2px rgba(0,0,0,.4),0 0 22px var(--copper-glow),0 0 50px rgba(232,140,90,.5)}50%{text-shadow:0 1px 0 #8a4530,0 2px 0 #6a3020,0 3px 0 #4a2010,0 4px 2px rgba(0,0,0,.4),0 0 35px var(--copper-glow),0 0 75px rgba(232,140,90,.7),0 0 120px rgba(232,140,90,.3)}}
+.hero p.lede{font-family:var(--serif);font-weight:300;font-size:15.5px;color:var(--text-soft);line-height:2;max-width:560px;margin:0 auto}
+
+.title-particles{position:absolute;inset:0;pointer-events:none}
+.title-particle{position:absolute;border-radius:50%;background:var(--copper-bright);box-shadow:0 0 6px var(--copper-glow),0 0 14px rgba(232,140,90,.4);animation:tpFloat 4s ease-in-out infinite}
+.title-particle:nth-child(1){width:3px;height:3px;top:12%;left:4%;animation-delay:0s}
+.title-particle:nth-child(2){width:2px;height:2px;top:8%;right:6%;animation-delay:.6s}
+.title-particle:nth-child(3){width:4px;height:4px;bottom:18%;left:10%;animation-delay:1.2s}
+.title-particle:nth-child(4){width:2.5px;height:2.5px;bottom:22%;right:8%;animation-delay:1.8s}
+.title-particle:nth-child(5){width:3.5px;height:3.5px;top:38%;left:1%;animation-delay:2.4s}
+.title-particle:nth-child(6){width:2px;height:2px;top:32%;right:3%;animation-delay:3s}
+@keyframes tpFloat{0%,100%{transform:translate(0,0) scale(1);opacity:.25}25%{transform:translate(20px,-24px) scale(2.3);opacity:.9}50%{transform:translate(-10px,-16px) scale(1.5);opacity:.45}75%{transform:translate(-22px,8px) scale(2.8);opacity:.75}}
+
+.scene-divider{max-width:920px;margin:20px auto 16px;padding:0 32px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.scene-strip{height:150px;border-radius:6px;overflow:hidden;position:relative;border:1px solid var(--line);transition:all .5s}
+.scene-strip:hover{border-color:var(--line-2)}
+.scene-strip .strip-img{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.38;transition:opacity .5s,transform .8s}
+.scene-strip:hover .strip-img{opacity:.58;transform:scale(1.04)}
+.scene-strip .strip-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 0%,rgba(23,18,14,.88) 100%);display:flex;align-items:flex-end;padding:16px 22px}
+.strip-label{font-family:var(--mincho);font-size:18px;font-weight:600;color:var(--text);letter-spacing:.04em;text-shadow:0 0 12px rgba(0,0,0,.8)}
+.strip-jp{font-family:var(--mincho);font-size:12px;color:var(--copper);margin-left:10px;font-weight:400}
+
+.graph-stage{max-width:1040px;margin:8px auto 0;padding:0 32px 40px;display:grid;grid-template-columns:1fr 360px;gap:36px;align-items:start;position:relative;z-index:10}
+.graph-area{position:relative;width:100%}
+.graph-svg{width:100%;height:auto;display:block;overflow:visible;position:relative;z-index:1}
+.edge-line{fill:none;stroke-width:2.2;transition:filter .35s}
+.edge:hover .edge-line,.edge.active .edge-line{filter:drop-shadow(0 0 8px var(--copper-glow))}
+.edge-hit{fill:none;stroke:transparent;stroke-width:26;cursor:pointer}
+.edge-label{font-family:var(--mincho);font-size:13px;fill:var(--text-soft);transition:fill .3s;letter-spacing:.04em}
+.edge:hover .edge-label,.edge.active .edge-label{fill:var(--copper-bright)}
+.edge-label-bg{fill:var(--bg);opacity:.85}
+.core-ring{fill:none;stroke:var(--line-2);stroke-width:1.2;stroke-dasharray:4 5;animation:coreRotate 28s linear infinite;transform-origin:320px 300px}
+@keyframes coreRotate{to{transform:rotate(360deg)}}
+.core-label{font-family:var(--mincho);font-weight:600;text-anchor:middle}
+.core-jp{fill:var(--copper);font-size:12px;letter-spacing:.1em}
+.core-cn{fill:var(--text-soft);font-size:15px}
+.edge-particle-core{fill:var(--copper-bright)}.edge-particle-glow{fill:var(--copper-glow)}
+
+.node-card{position:absolute;z-index:5;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;transition:filter .4s}
+.node-card:hover{z-index:20!important;filter:drop-shadow(0 0 28px var(--copper-glow))}
+.node-card-avatar{width:100px;height:100px;border-radius:50%;overflow:hidden;border:3px solid var(--ring-color);box-shadow:0 0 24px var(--glow-color),0 8px 24px rgba(0,0,0,.5);transition:all .5s cubic-bezier(.34,1.56,.64,1)}
+.node-card:hover .node-card-avatar,.node-card.active .node-card-avatar{border-width:4px;box-shadow:0 0 36px var(--glow-color),0 12px 32px rgba(0,0,0,.6)}
+.node-card-avatar img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.node-card:hover .node-card-avatar img{transform:scale(1.08)}
+.node-card-label{font-family:var(--mincho);font-size:17px;font-weight:700;color:var(--name-color);text-shadow:0 0 14px var(--glow-color),0 2px 8px rgba(0,0,0,.7);white-space:nowrap;transition:all .3s}
+.node-card-spotlight{position:absolute;top:-6px;right:-6px;font-family:var(--mincho);font-size:10px;color:var(--copper-bright);background:rgba(23,18,14,.85);border:1px solid var(--line-2);border-radius:3px;padding:2px 7px;letter-spacing:.06em;opacity:0;transform:translateY(-6px);transition:all .4s}
+.node-card.top .node-card-spotlight{opacity:1;transform:translateY(0)}
+
+/* DETAIL — image carousel */
+.detail{background:var(--panel);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:4px;overflow:hidden;min-height:300px;position:relative;transition:transform .15s ease-out,box-shadow .4s;transform-style:preserve-3d;perspective:800px}
+.detail:hover{box-shadow:0 8px 40px rgba(0,0,0,.5),0 0 0 1px var(--line-2)}
+.detail::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--accent);box-shadow:0 0 12px var(--copper-glow);animation:accentPulse 3s ease-in-out infinite;z-index:2}
+@keyframes accentPulse{0%,100%{box-shadow:0 0 12px var(--copper-glow)}50%{box-shadow:0 0 24px var(--copper-glow),0 0 48px var(--copper-glow)}}
+.detail-carousel{position:relative;height:230px;overflow:hidden;cursor:pointer}
+.detail-carousel img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;opacity:0;transition:opacity .8s ease-in-out}
+.detail-carousel img.active{opacity:.6}
+.detail-carousel:hover img.active{opacity:.8}
+.detail-carousel-counter{position:absolute;top:12px;right:14px;z-index:3;background:rgba(23,18,14,.75);border-radius:3px;padding:3px 8px;font-family:var(--sans);font-size:11px;color:var(--text-soft);letter-spacing:.04em}
+.detail-carousel-arrows{position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:space-between;padding:0 8px;pointer-events:none;opacity:0;transition:opacity .3s}
+.detail-carousel:hover .detail-carousel-arrows{opacity:1}
+.detail-carousel-arrow{pointer-events:auto;width:30px;height:30px;border-radius:50%;background:rgba(23,18,14,.7);border:1px solid var(--line-2);color:var(--text-soft);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s}
+.detail-carousel-arrow:hover{background:rgba(204,107,61,.25);color:var(--copper-bright);border-color:var(--copper)}
+.detail-carousel-dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);z-index:3;display:flex;gap:5px}
+.detail-carousel-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.25);transition:all .3s;cursor:pointer}
+.detail-carousel-dot.active{background:var(--copper-bright);box-shadow:0 0 6px var(--copper-glow)}
+.detail-body-wrap{padding:18px 24px 20px;position:relative;z-index:2}
+.detail-tag{font-family:var(--sans);font-weight:300;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-faint);margin-bottom:5px}
+.detail-title{font-family:var(--mincho);font-size:20px;font-weight:700;color:var(--text);margin-bottom:2px;transition:transform .3s}
+.detail:hover .detail-title{transform:translateZ(8px)}
+.detail-jp{font-family:var(--mincho);font-size:11px;color:var(--accent);margin-bottom:8px}
+.detail-body{font-family:var(--serif);font-weight:300;font-size:12.5px;line-height:1.8;color:var(--text-soft)}
+.detail-quote{margin-top:10px;padding:8px 0 2px;border-top:1px solid var(--line);font-family:var(--mincho);font-size:13px;color:var(--text);line-height:1.5}
+.detail-quote::before{content:'「';color:var(--accent)}.detail-quote::after{content:'」';color:var(--accent)}
+.detail-hint{font-family:var(--sans);font-weight:300;font-size:10px;color:var(--text-faint);margin-top:8px;letter-spacing:.03em}
+
+.section-wrap{max-width:760px;margin:0 auto;padding:48px 32px 100px}
+.section-head{text-align:center;margin-bottom:48px}
+.section-eyebrow{font-family:var(--mincho);font-size:15px;letter-spacing:.12em;color:var(--copper);margin-bottom:10px}
+.section-title{font-family:var(--mincho);font-size:30px;font-weight:700;color:var(--text)}
+.phase{position:relative;padding-left:42px;padding-bottom:8px}
+.phase::before{content:'';position:absolute;left:11px;top:34px;bottom:-8px;width:1px;background:linear-gradient(180deg,var(--line-2),var(--line))}
+.phase:last-child::before{display:none}
+.phase-dot{position:absolute;left:5px;top:18px;width:13px;height:13px;border-radius:50%;background:var(--bg);border:1.5px solid var(--line-2);transition:all .5s cubic-bezier(.34,1.56,.64,1);z-index:2}
+.phase.open .phase-dot{background:var(--copper);border-color:var(--copper-bright);box-shadow:0 0 0 3px rgba(204,107,61,.15),0 0 16px var(--copper-glow);animation:dotPulse 2.5s ease-in-out infinite}
+@keyframes dotPulse{0%,100%{box-shadow:0 0 0 3px rgba(204,107,61,.15),0 0 16px var(--copper-glow)}50%{box-shadow:0 0 0 8px rgba(204,107,61,.05),0 0 28px var(--copper-glow)}}
+.phase-toggle{width:100%;display:flex;align-items:baseline;gap:14px;padding:14px 0;background:none;border:none;cursor:pointer;text-align:left;font-family:var(--sans)}
+.phase-idx{font-family:var(--mincho);font-size:15px;font-weight:600;color:var(--copper);flex-shrink:0}
+.phase-name{flex:1;font-family:var(--mincho);font-size:19px;font-weight:600;color:var(--text-soft);transition:color .3s}
+.phase-toggle:hover .phase-name,.phase.open .phase-name{color:var(--text)}
+.phase-jp{font-family:var(--mincho);font-size:12px;color:var(--text-faint)}
+.phase-body{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows .6s cubic-bezier(.16,1,.3,1),opacity .6s}
+.phase-body-inner{overflow:hidden;min-height:0}
+.phase.open .phase-body{grid-template-rows:1fr;opacity:1}
+.phase-content{display:flex;gap:18px;padding:6px 0 22px}
+.phase-text{flex:1;font-family:var(--serif);font-weight:300;font-size:14px;line-height:2;color:var(--text-soft)}
+.phase-text b{font-weight:400;color:var(--text)}
+.phase-img{width:140px;min-height:100px;border-radius:4px;overflow:hidden;flex-shrink:0;border:1px solid var(--line);transition:all .4s}
+.phase-img img{width:100%;height:100%;object-fit:cover;opacity:.48;transition:opacity .4s}
+.phase.open .phase-img img{opacity:.7}.phase-img:hover img{opacity:.9}
+.tag-y{color:var(--y-light)}.tag-g{color:var(--g-light)}.tag-h{color:var(--h-light)}
+
+.footer{text-align:center;padding:8px 32px 0}
+.footer-ending{max-width:700px;margin:0 auto;padding:0 32px 60px;text-align:center}
+.footer-ending img{max-width:100%;border-radius:8px;border:1px solid var(--line);opacity:.7;transition:opacity .5s,transform .5s}
+.footer-ending img:hover{opacity:.9;transform:scale(1.02)}
+.footer-line{font-family:var(--mincho);font-style:normal;font-size:18px;color:var(--text-soft);line-height:1.8;margin-bottom:18px}
+.footer-jp{font-family:var(--mincho);font-size:13px;color:var(--text-faint);margin-top:16px;letter-spacing:.1em}
+
+.music-toggle{position:fixed;bottom:28px;right:28px;z-index:500;width:44px;height:44px;border-radius:50%;background:var(--panel-2);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line-2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .4s cubic-bezier(.34,1.56,.64,1);box-shadow:0 4px 18px rgba(0,0,0,.45)}
+.music-toggle:hover{transform:scale(1.12);border-color:var(--copper-bright);box-shadow:0 6px 28px rgba(0,0,0,.55),0 0 22px var(--copper-glow)}
+.music-toggle svg{width:18px;height:18px;fill:var(--text-soft);transition:fill .3s}
+.music-toggle:hover svg{fill:var(--copper-bright)}
+.music-toggle.playing{background:rgba(204,107,61,.15);border-color:var(--copper)}
+.music-toggle.playing svg{fill:var(--copper-bright)}
+.music-toggle.playing::after{content:'';position:absolute;inset:-5px;border-radius:50%;border:1.5px solid var(--copper-glow);animation:musicPulse 2s ease-out infinite}
+@keyframes musicPulse{0%{transform:scale(1);opacity:.5}100%{transform:scale(1.7);opacity:0}}
+
+.ripple{position:fixed;z-index:300;pointer-events:none;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle,rgba(232,140,90,.5) 0%,transparent 70%);transform:translate(-50%,-50%) scale(0);animation:rippleAnim .9s cubic-bezier(.16,1,.3,1) forwards}
+@keyframes rippleAnim{to{transform:translate(-50%,-50%) scale(22);opacity:0}}
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--panel-2);backdrop-filter:blur(16px);border:1px solid var(--line-2);border-radius:4px;padding:10px 24px;font-family:var(--sans);font-size:13px;color:var(--text-soft);opacity:0;transition:transform .5s cubic-bezier(.34,1.56,.64,1),opacity .4s;z-index:400;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1)}
+.reveal.in{opacity:1;transform:translateY(0)}
+@keyframes rise{from{opacity:0;transform:translateY(20px);filter:blur(6px)}to{opacity:1;transform:translateY(0);filter:blur(0)}}
+.hero-eyebrow{animation:rise 1.1s cubic-bezier(.16,1,.3,1) both}
+.hero h1{animation:rise 1.2s cubic-bezier(.16,1,.3,1) .12s both,titleBreathe 8s ease-in-out 1.5s infinite}
+.hero p.lede{animation:rise 1.2s cubic-bezier(.16,1,.3,1) .24s both}
+
+/* ═══ INTRO OVERLAY ═══ */
+.intro-overlay{position:fixed;inset:0;z-index:999;pointer-events:none;background:rgba(23,18,14,.85);transition:opacity 2s ease-out}
+.intro-overlay.done{opacity:0}
+.intro-title{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1000;pointer-events:none;font-family:var(--mincho);font-size:clamp(26px,4.5vw,38px);font-weight:700;color:var(--copper-bright);text-shadow:0 0 40px var(--copper-glow),0 0 80px rgba(232,140,90,.6);text-align:center;white-space:nowrap;opacity:0;transition:opacity 2.5s ease-out}
+.intro-title.visible{opacity:1}
+.intro-title.done{opacity:0;transform:translate(-50%,-50%) scale(1.5);transition:opacity 1s ease-out,transform 1s ease-out}
+.intro-sub{position:fixed;top:calc(50% + 40px);left:50%;transform:translate(-50%,-50%);z-index:1000;pointer-events:none;font-family:var(--mincho);font-size:14px;font-weight:400;color:var(--text-soft);letter-spacing:.15em;opacity:0;transition:opacity 2s ease-out 1s}
+.intro-sub.visible{opacity:.6}
+
+/* card fly-in — applies to avatar, not card (to avoid position conflict) */
+.node-card.intro-fly .node-card-avatar{animation:cardFlyIn .9s cubic-bezier(.34,1.56,.64,1) both}
+.node-card.intro-fly .node-card-label{animation:cardFlyIn .9s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes cardFlyIn{
+  0%{transform:scale(.1) rotate(200deg);opacity:0;filter:blur(6px)}
+  65%{opacity:1;filter:blur(0)}
+  100%{transform:scale(1) rotate(0deg);opacity:1;filter:blur(0)}
+}
+
+@media(max-width:840px){.graph-stage{grid-template-columns:1fr;gap:24px}.detail{min-height:auto}.cursor-glow{display:none}.node-card-avatar{width:76px;height:76px}.node-card-label{font-size:14px}.scene-divider{grid-template-columns:1fr}.phase-content{flex-direction:column}.phase-img{width:100%;height:130px}.detail-carousel{height:180px}}
+@media(max-width:560px){.topbar{padding:0 18px}.brand-sub{display:none}.hero{padding:36px 18px 4px}.graph-stage{padding:0 18px 32px}.section-wrap{padding:32px 18px 80px}.node-card-avatar{width:62px;height:62px}.node-card-label{font-size:12px}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}.ambient,#sakura-canvas,.cursor-glow,.ripple,.title-particles{display:none}.core-ring{animation:none!important}.hero h1{animation:rise .01ms both!important;text-shadow:none;transform:none}}
+</style>
+</head>
+<body>
+
+<div class="ambient"><div class="ambient-pool a"></div><div class="ambient-pool b"></div><div class="ambient-pool c"></div><div class="ambient-pool d"></div></div>
+<canvas id="sakura-canvas"></canvas>
+<div class="intro-overlay" id="introOverlay"></div>
+<div class="intro-title" id="introTitle">やはり俺の青春ラブコメは<br>まちがっている。</div>
+<div class="intro-sub" id="introSub">—— 即便如此，他们依然在寻找真物</div>
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<nav class="topbar"><div class="brand"><span class="jp">やはり</span> 侍奉社 · 三人的距离</div><div class="brand-sub">我的青春恋爱物语果然有问题</div></nav>
+
+<header class="hero">
+  <div class="title-particles"><div class="title-particle"></div><div class="title-particle"></div><div class="title-particle"></div><div class="title-particle"></div><div class="title-particle"></div><div class="title-particle"></div></div>
+  <div class="hero-eyebrow">青春は嘘であり、悪である。</div>
+  <h1>三个人，<em>一间社团</em>，<br>和一份说不出口的真物</h1>
+  <p class="lede">侍奉社里只有三把椅子。点击角色卡片，看他们旋转到聚光灯下。</p>
+</header>
+
+<div class="scene-divider reveal">
+  <div class="scene-strip"><div class="strip-img" style="background-image:url(./社团.png)"></div><div class="strip-overlay"><span class="strip-label">侍奉社 · 社团教室</span><span class="strip-jp">奉仕部の教室</span></div></div>
+  <div class="scene-strip"><div class="strip-img" style="background-image:url(./合照.png)"></div><div class="strip-overlay"><span class="strip-label">三人的时光 · 侍奉社</span><span class="strip-jp">いつもの放課後</span></div></div>
+</div>
+
+<section class="graph-stage">
+  <div class="graph-area" id="graphArea">
+    <svg class="graph-svg" id="graphSvg" viewBox="0 0 640 480" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="lineYH"><stop offset="0%" stop-color="#8FA8C8"/><stop offset="100%" stop-color="#7E938C"/></linearGradient>
+        <linearGradient id="lineYG"><stop offset="0%" stop-color="#8FA8C8"/><stop offset="100%" stop-color="#E88C5A"/></linearGradient>
+        <linearGradient id="lineHG"><stop offset="0%" stop-color="#7E938C"/><stop offset="100%" stop-color="#E88C5A"/></linearGradient>
+      </defs>
+      <circle class="core-ring" cx="320" cy="300" r="48"/>
+      <text class="core-label core-jp" x="320" y="294">奉仕部</text><text class="core-label core-cn" x="320" y="314">真物</text>
+      <g class="edge" data-key="yh"><line class="edge-line" id="elnYH" x1="320" y1="96" x2="150" y2="392" stroke="url(#lineYH)" stroke-width="2.4"/><line class="edge-hit" id="ehtYH" x1="320" y1="96" x2="150" y2="392"/><rect class="edge-label-bg" id="elbYH" x="170" y="232" width="92" height="20" rx="3"/><text class="edge-label" id="ellYH" x="216" y="246" text-anchor="middle">信任→依赖→喜欢</text></g>
+      <g class="edge" data-key="yg"><line class="edge-line" id="elnYG" x1="320" y1="96" x2="490" y2="392" stroke="url(#lineYG)" stroke-width="2"/><line class="edge-hit" id="ehtYG" x1="320" y1="96" x2="490" y2="392"/><rect class="edge-label-bg" id="elbYG" x="388" y="232" width="78" height="20" rx="3"/><text class="edge-label" id="ellYG" x="427" y="246" text-anchor="middle">挚友 · 情敌</text></g>
+      <g class="edge" data-key="hg"><line class="edge-line" id="elnHG" x1="150" y1="392" x2="490" y2="392" stroke="url(#lineHG)" stroke-width="2"/><line class="edge-hit" id="ehtHG" x1="150" y1="392" x2="490" y2="392"/><rect class="edge-label-bg" id="elbHG" x="272" y="404" width="96" height="20" rx="3"/><text class="edge-label" id="ellHG" x="320" y="418" text-anchor="middle">恩情→暗恋→告别</text></g>
+      <g id="edgeParticles"></g>
+    </svg>
+    <div class="node-card top" data-key="yukino" id="cardYukino" style="--ring-color:rgba(190,218,242,.45);--glow-color:rgba(143,168,200,.4);--name-color:var(--y-light)"><div class="node-card-avatar"><img src="./雪之下.png" alt="雪之下雪乃"></div><span class="node-card-label">雪之下 雪乃</span><span class="node-card-spotlight">✦ FOCUS</span></div>
+    <div class="node-card" data-key="hachiman" id="cardHachiman" style="--ring-color:rgba(185,215,205,.4);--glow-color:rgba(126,147,140,.35);--name-color:var(--h-light)"><div class="node-card-avatar"><img src="./截屏2026-06-18 13.50.44.png" alt="比企谷八幡"></div><span class="node-card-label">比企谷 八幡</span><span class="node-card-spotlight">✦ FOCUS</span></div>
+    <div class="node-card" data-key="yuigahama" id="cardYuigahama" style="--ring-color:rgba(248,200,168,.4);--glow-color:rgba(232,140,90,.4);--name-color:var(--g-light)"><div class="node-card-avatar"><img src="./由比滨.png" alt="由比浜结衣"></div><span class="node-card-label">由比浜 結衣</span><span class="node-card-spotlight">✦ FOCUS</span></div>
+  </div>
+  <div class="detail" id="detail">
+    <div class="detail-carousel" id="detailCarousel"><div id="carouselImgs"></div><div class="detail-carousel-counter" id="carouselCounter">1/4</div><div class="detail-carousel-arrows"><button class="detail-carousel-arrow" id="carouselPrev">‹</button><button class="detail-carousel-arrow" id="carouselNext">›</button></div><div class="detail-carousel-dots" id="carouselDots"></div></div>
+    <div class="detail-body-wrap" id="detailBody"></div>
+  </div>
+</section>
+
+<section class="section-wrap">
+  <div class="section-head reveal"><div class="section-eyebrow">感情の軌跡</div><div class="section-title">距离是怎么变化的</div></div>
+  <div id="timeline"></div>
+</section>
+
+<footer class="footer reveal">
+  <div class="footer-line">名为青春的谎言，于此终结。</div>
+  <div class="footer-ending"><img src="./雪之下与比企谷2026-06-18 13.03.55.png" alt="雪之下与比企谷" loading="lazy"></div>
+  <div class="footer-jp">―― やはり俺の青春ラブコメはまちがっている。</div>
+</footer>
+
+<div class="toast" id="toast"></div>
+<audio id="bgmAudio" loop preload="auto" style="display:none"></audio>
+<button class="music-toggle" id="musicToggle" aria-label="背景音乐" title="播放 OST"><svg viewBox="0 0 24 24"><path d="M12 3v10.55A3.99 3.99 0 0010 13c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg></button>
+
+<script>
+const chars={
+  yukino:{accent:'var(--yukino)',tag:'雪之下 雪乃 · Yukino',title:'雪之下雪乃',jp:'完璧で、けれど脆い。',body:'全校第一的美少女，成绩、容貌、气质都近乎完美，却也因此活得格外痛苦。她骄傲、毒舌、习惯把一切扛在自己身上。<br><br>在一次次的争执与并肩之后，她第一次允许自己软弱，也第一次说出「将来有一天，你要来拯救我」。',quote:'我要改变人类，还有这个世界。',hint:'她与八幡的连线，是全剧的核心',gallery:['./雪之下.png','./雪之下与比企谷2026-06-18 13.03.55.png','./雪之下与比企谷2026-06-18 13.03.32.png','./合照.png']},
+  hachiman:{accent:'var(--hachiman)',tag:'比企谷 八幡 · Hachiman',title:'比企谷八幡',jp:'ぼっちには、ぼっちの矜持がある。',body:'扭曲的现实主义者，没有朋友，也不打算有。他解决问题的方式总是「牺牲自己」。<br><br>他用犬儒和自嘲把自己包起来，但内心比谁都渴望真实的连接。正是那句「我想要真物」，把三个人摇摇欲坠的关系逼到了必须面对真心的那一刻。',quote:'人生在世何其痛苦，所以咖啡至少该甜一点。',hint:'他的自我牺牲，同时伤了两个女孩的心',gallery:['./截屏2026-06-18 13.50.44.png','./由比滨与大老师.png','./由比滨与比企谷2026-06-18 13.00.29.png','./由比滨与比企谷2026-06-18 13.00.00.png']},
+  yuigahama:{accent:'var(--yuigahama)',tag:'由比浜 结衣 · Yui',title:'由比浜结衣',jp:'やさしさは、ときに残酷だ。',body:'温柔、体贴、最会照顾别人情绪的元气少女。一切的起点是一场车祸——八幡为了救她的小狗受了伤。<br><br>她比谁都早察觉自己的心意。最后她选择鼓起勇气、正面告白——哪怕早已猜到结局。',quote:'呀吼——！小企鹅！',hint:'她和雪乃，既是挚友，也是情敌',gallery:['./由比滨.png','./由比滨2026-06-18 12.55.33.png','./由比滨2026-06-18 12.57.20.png','./由比滨2026-06-18 12.57.07.png']},
+};
+const relations={
+  intro:{accent:'var(--copper)',tag:'奉仕部 · The Service Club',title:'侍奉社与「真物」',jp:'欲しいものは、本物が欲しい。',body:'侍奉社是三个人相遇的地方。表面上他们在「帮别人解决委托」，实际上是三个不擅长靠近别人的人，笨拙地学习如何与人相处。<br><br>贯穿始终的，是八幡那句执念般的渴望：他要的不是体贴的客套，而是哪怕笨拙也真实的东西——<b>真物</b>。',quote:'点击角色卡片，看他们旋转到聚光灯下。',hint:'试试点击下方的角色卡片',gallery:['./社团.png','./三人合照.png','./合照.png','./雪之下.png']},
+  yh:{accent:'var(--copper)',tag:'核心线 · 雪乃 ⟷ 八幡',title:'信任 → 依赖 → 喜欢',jp:'いつか、私を助けてね。',body:'两人最初是互相看不顺眼的辩论对手。转折发生在文化祭——雪乃重新认识了这个总是自我牺牲的男生。<br><br><b>信任</b>→彼此交心；<b>依赖</b>→「将来你要来拯救我」；<b>喜欢</b>→她悄悄把志愿从理科改成了文科。两个都不擅长表达的人，最终走向了彼此。',quote:'欲しいものは、本物が欲しい。',hint:'这是三条线里，唯一走到一起的那条',gallery:['./雪之下.png','./雪之下与比企谷2026-06-18 13.03.55.png','./雪之下与比企谷2026-06-18 13.03.32.png','./雪之下与比企谷2026-06-18 13.03.27.png']},
+  hg:{accent:'var(--yuigahama)',tag:'由比浜 ⟷ 八幡',title:'恩情 → 暗恋 → 告别',jp:'ずるいのは、わかってる。',body:'起点是那场车祸的恩情与愧疚。由比浜一次次被八幡的温柔打动——尽管那温柔总是以伤害自己为代价。<br><br>她很早就明白了这份喜欢大概不会有结果。但她没有躲藏，而是郑重地告白，再坦然地接受失恋。她要的是一个不留遗憾的青春。',quote:'就算知道结果，我也想自己说出口。',hint:'温柔的人，往往最先学会告别',gallery:['./由比滨.png','./由比滨与比企谷2026-06-18 13.00.00.png','./由比滨与比企谷2026-06-18 13.00.29.png','./由比滨与大老师.png']},
+  yg:{accent:'var(--yukino)',tag:'雪乃 ⟷ 由比浜',title:'挚友，也是情敌',jp:'本当の友達になりたい。',body:'她们是侍奉社里最亲密的两个女孩，却同时喜欢上了同一个人——这份心意，让友情变得无比微妙。<br><br>难得的是，她们谁都不愿意用欺骗和回避去维系这段关系。在故事最后，两个人有了「重新开始」的可能。',quote:'我不想要靠谎言维持的温柔。',hint:'连八幡都说，这两人之间也有他们自己的故事',gallery:['./合照.png','./三人合照.png','./由比滨2026-06-18 12.57.20.png','./社团.png']},
+};
+const phases=[
+  {idx:'壱',name:'邂逅 · 侍奉社',jp:'出会い',img:'./社团.png',text:'平冢老师看不下去八幡那篇愤世嫉俗的作文，把他丢进了侍奉社，遇见独自一人的<b class="tag-y">雪乃</b>。不久，<b class="tag-g">由比浜</b>带着一个「想学做饼干」的委托敲门——其实，那是她为了接近八幡找的借口。三把椅子凑齐了，三个人的距离，从这里开始。'},
+  {idx:'弐',name:'误解 · 伪物',jp:'すれ違い',img:'./由比滨2026-06-18 12.57.07.png',text:'八幡用一贯的方式解决委托：把脏活、骂名、伤害全揽到自己身上，让别人得以保全。可这种「自我牺牲」让两个女孩都无法接受——<b class="tag-g">由比浜</b>是单纯地心疼他，<b class="tag-y">雪乃</b>则觉得这背离了真实、是在维护一份「伪物」。第一道裂痕，浮现了。'},
+  {idx:'参',name:'真物 · 摊开心迹',jp:'本物が欲しい',img:'./由比滨与比企谷2026-06-18 13.00.00.png',text:'在几乎要决裂的边缘，<b class="tag-h">八幡</b>近乎崩溃地喊出了那句——「我想要真物」。这是全剧的转折：三个人第一次卸下伪装，正面承认彼此的真心有多重要，也第一次承认，维持现状的温柔其实是一种逃避。'},
+  {idx:'肆',name:'抉择 · 告白',jp:'告白',img:'./雪之下与比企谷2026-06-18 13.03.27.png',text:'真心一旦摊开，就再也回不去了。<b class="tag-g">由比浜</b>鼓起勇气，郑重地告白；<b class="tag-y">雪乃</b>也不再逃避自己的心意，向前迈了一步。三角的张力被拉到顶点——每个人都必须给出自己的答案。'},
+  {idx:'伍',name:'终幕 · 各自的答案',jp:'それぞれの答え',img:'./雪之下与比企谷2026-06-18 13.03.32.png',text:'<b class="tag-y">雪乃</b>与<b class="tag-h">八幡</b>最终走到了一起，两个笨拙的人决定一起去寻找那个「真物」。<b class="tag-g">由比浜</b>正面接受了失恋，却也因此完成了一段不留遗憾的青春。而两个女孩，选择放下情敌的身份，重新做真正的朋友。名为青春的谎言，于此终结。'}
+];
+
+const reduce=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+const isTouch='ontouchstart' in window||navigator.maxTouchPoints>0;
+const lerp=(a,b,t)=>a+(b-a)*t;
+const clamp=(v,mn,mx)=>Math.max(mn,Math.min(mx,v));
+
+// SAKURA — supports storm mode for intro
+const sC=document.getElementById('sakura-canvas'),sX=sC.getContext('2d');let sw,sh;function rSz(){sw=sC.width=innerWidth;sh=sC.height=innerHeight}rSz();addEventListener('resize',rSz);
+const petals=[],pCl=['rgba(255,190,200,','rgba(255,175,190,','rgba(255,200,210,','rgba(245,180,195,','rgba(255,185,198,'];
+let wind=0,gustForce=0,stormMode=false,stormTimer=0;
+class SP{constructor(rY=1,sMode=false){this.reset(rY,sMode)}reset(rY,sMode=false){this.x=Math.random()*sw;this.y=rY?Math.random()*sh:(sMode?Math.random()*sh:-20-Math.random()*200);this.sz=(sMode?5+Math.random()*12:4+Math.random()*10);this.bS=(sMode?.3+Math.random()*.6:.4+Math.random()*.9);this.sp=this.bS;this.wA=(sMode?.3+Math.random()*.5:.3+Math.random()*.7);this.wF=.01+Math.random()*.02;this.wP=Math.random()*Math.PI*2;this.rt=Math.random()*Math.PI*2;this.rS=(Math.random()-.5)*(sMode?.04:.03);this.op=(sMode?.6+Math.random()*.35:.25+Math.random()*.5);this.cl=pCl[Math.floor(Math.random()*pCl.length)];this.gT=0;this.gS=0;this.fading=false;this.targetOp=this.op}update(w,gf){if(this.gT<=0&&Math.random()<.003){this.gT=60+Math.random()*120;this.gS=(Math.random()-.5)*2.5}if(this.gT>0){this.gT--;this.gS*=.96}if(this.fading){this.op=lerp(this.op,this.targetOp,.01)}const d=Math.sin(this.y*this.wF+this.wP)*this.wA;this.x+=d+w*.4+this.gS*.6+gf;this.y+=this.sp;this.rt+=this.rS;if(this.x<-40)this.x=sw+30;if(this.x>sw+40)this.x=-30;if(this.y>sh+40)this.reset(0,stormMode)}draw(c){c.save();c.translate(this.x,this.y);c.rotate(this.rt);c.scale(1,.45);c.fillStyle=this.cl+this.op+')';c.beginPath();c.arc(0,0,this.sz,0,Math.PI*2);c.fill();c.fillStyle='rgba(255,255,255,'+(this.op*.2)+')';c.beginPath();c.arc(-this.sz*.2,-this.sz*.15,this.sz*.35,0,Math.PI*2);c.fill();c.restore()}}
+for(let i=0;i<35;i++)petals.push(new SP(1,false));
+function setStormMode(on){stormMode=on;if(on){gustForce=0;stormTimer=0;while(petals.length<120)petals.push(new SP(1,true));for(const p of petals){p.reset(Math.random()>.3,true);p.y=Math.random()*sh;p.x=Math.random()*sw;p.op=.6+Math.random()*.35;p.fading=false}}}
+function aS(){if(reduce){sC.style.display='none';return}sX.clearRect(0,0,sw,sh);wind+=(Math.sin(Date.now()*.0003)*.3-wind)*.02;if(stormMode){stormTimer++;if(stormTimer>180&&stormTimer<300){gustForce=lerp(gustForce,9,.025)}else if(stormTimer>=300){gustForce*=0.93}}else gustForce=0;
+// Fade & remove excess petals when not in storm mode
+if(!stormMode){for(let i=petals.length-1;i>=35;i--){petals[i].fading=true;petals[i].targetOp=0;if(petals[i].op<.02)petals.splice(i,1)}}
+for(const p of petals){p.update(wind,gustForce);p.draw(sX)}requestAnimationFrame(aS)}if(!reduce)aS();
+
+// CURSOR
+const cG=document.getElementById('cursorGlow');let tX=-500,tY=-500,cX=-500,cY=-500;
+document.addEventListener('mousemove',e=>{tX=e.clientX;tY=e.clientY;cG.classList.add('visible')});document.addEventListener('mouseleave',()=>cG.classList.remove('visible'));
+function aG(){cX=lerp(cX,tX,.07);cY=lerp(cY,tY,.07);cG.style.left=cX+'px';cG.style.top=cY+'px';if(!reduce)requestAnimationFrame(aG)}if(!reduce)aG();
+
+// EDGE PARTICLES
+const pG=document.getElementById('edgeParticles'),epD=[];
+[{x1:320,y1:96,x2:150,y2:392},{x1:320,y1:96,x2:490,y2:392},{x1:150,y1:392,x2:490,y2:392}].forEach(e=>{for(let i=0;i<3;i++){const t=i/3;const g=document.createElementNS('http://www.w3.org/2000/svg','circle');g.setAttribute('r','7');g.setAttribute('fill','rgba(232,140,90,.18)');pG.appendChild(g);const c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('r','2.5');c.setAttribute('fill','#E88C5A');pG.appendChild(c);epD.push({edge:e,t,speed:.0012+Math.random()*.0018,glow:g,core:c})}});
+function aEP(){if(reduce)return;for(const p of epD){p.t+=p.speed;if(p.t>1)p.t-=1;const x=lerp(p.edge.x1,p.edge.x2,p.t),y=lerp(p.edge.y1,p.edge.y2,p.t);p.glow.setAttribute('cx',x);p.glow.setAttribute('cy',y);p.core.setAttribute('cx',x);p.core.setAttribute('cy',y)}requestAnimationFrame(aEP)}if(!reduce)aEP();
+
+// ROTATION
+const graphArea=document.getElementById('graphArea'),graphSvg=document.getElementById('graphSvg');
+const cards={yukino:document.getElementById('cardYukino'),hachiman:document.getElementById('cardHachiman'),yuigahama:document.getElementById('cardYuigahama')};
+const VB={w:640,h:480},SLOTS={top:{x:320,y:88},bl:{x:135,y:400},br:{x:505,y:400}};
+let slot={top:'yukino',bl:'hachiman',br:'yuigahama'};
+const edgeEls={
+  yh:{ln:document.getElementById('elnYH'),ht:document.getElementById('ehtYH'),lb:document.getElementById('elbYH'),ll:document.getElementById('ellYH'),from:'yukino',to:'hachiman'},
+  yg:{ln:document.getElementById('elnYG'),ht:document.getElementById('ehtYG'),lb:document.getElementById('elbYG'),ll:document.getElementById('ellYG'),from:'yukino',to:'yuigahama'},
+  hg:{ln:document.getElementById('elnHG'),ht:document.getElementById('ehtHG'),lb:document.getElementById('elbHG'),ll:document.getElementById('ellHG'),from:'hachiman',to:'yuigahama'},
+};
+function vbToPx(vx,vy){const sr=graphSvg.getBoundingClientRect(),ar=graphArea.getBoundingClientRect();return{x:(sr.left-ar.left)+vx*sr.width/VB.w,y:(sr.top-ar.top)+vy*sr.height/VB.h}}
+function placeCard(card,vx,vy){const p=vbToPx(vx,vy);card.style.left=p.x+'px';card.style.top=p.y+'px';card.style.transform='translate(-50%,-50%)'}
+function layoutCards(){for(const[s,c]of Object.entries(slot)){placeCard(cards[c],SLOTS[s].x,SLOTS[s].y);cards[c].classList.toggle('top',s==='top')}updateEdges()}
+function getCardVb(key){const c=cards[key],ar=graphArea.getBoundingClientRect(),sr=graphSvg.getBoundingClientRect(),cr=c.getBoundingClientRect();return{x:(cr.left+cr.width/2-ar.left-(sr.left-ar.left))*VB.w/sr.width,y:(cr.top+cr.height/2-ar.top-(sr.top-ar.top))*VB.h/sr.height}}
+function updateEdges(){const pos={};for(const k of Object.keys(cards))pos[k]=getCardVb(k);for(const e of Object.values(edgeEls)){const p1=pos[e.from],p2=pos[e.to];e.ln.setAttribute('x1',p1.x);e.ln.setAttribute('y1',p1.y);e.ln.setAttribute('x2',p2.x);e.ln.setAttribute('y2',p2.y);e.ht.setAttribute('x1',p1.x);e.ht.setAttribute('y1',p1.y);e.ht.setAttribute('x2',p2.x);e.ht.setAttribute('y2',p2.y)}}
+let animA=false,animS=0,animF={},animT={},animSpot=null;const AD=700;
+function bezPt(p0,p1,p2,t){const u=1-t;return{x:u*u*p0.x+2*u*t*p1.x+t*t*p2.x,y:u*u*p0.y+2*u*t*p1.y+t*t*p2.y}}
+function animRot(now){if(!animS)animS=now;const raw=clamp((now-animS)/AD,0,1),t=1-Math.pow(1-raw,3);
+  for(const[k,card]of Object.entries(cards)){const f=animF[k],to=animT[k],mid={x:(f.x+to.x)/2,y:(f.y+to.y)/2},pdx=to.x-f.x,pdy=to.y-f.y,dist=Math.hypot(pdx,pdy),nx=-pdy/dist,ny=pdx/dist,cp={x:mid.x+nx*(k===animSpot?1:-1)*dist*.35,y:mid.y+ny*(k===animSpot?1:-1)*dist*.35},pt=bezPt(f,cp,to,t);placeCard(card,pt.x,pt.y)}
+  updateEdges();if(raw<1)requestAnimationFrame(animRot);else{for(const[k]of Object.entries(cards))placeCard(cards[k],animT[k].x,animT[k].y);animA=false;animS=0;layoutCards()}}
+function getSlot(key){for(const[s,c]of Object.entries(slot))if(c===key)return s;return null}
+function spotlight(key){if(animA||getSlot(key)==='top')return;animA=true;animSpot=key;
+  for(const[k]of Object.entries(cards)){const vb=getCardVb(k);animF[k]={x:vb.x,y:vb.y}}
+  const cs=getSlot(key);let ns={};if(cs==='bl')ns={top:slot.bl,bl:slot.br,br:slot.top};else if(cs==='br')ns={top:slot.br,bl:slot.top,br:slot.bl};
+  animT={};for(const[s,c]of Object.entries(ns))animT[c]=SLOTS[s];slot=ns;requestAnimationFrame(animRot)}
+for(const[k,card]of Object.entries(cards)){card.addEventListener('click',e=>{e.stopPropagation();spotlight(k);showDetail(k)})}
+document.querySelectorAll('.edge-hit').forEach(el=>el.addEventListener('click',()=>showDetail(el.closest('.edge').dataset.key)));
+
+// RIPPLE
+document.addEventListener('click',e=>{if(reduce)return;const t=e.target.closest('.node-card,.edge-hit,.phase-toggle,.detail,.footer-ending');if(!t)return;const r=document.createElement('div');r.className='ripple';r.style.left=e.clientX+'px';r.style.top=e.clientY+'px';document.body.appendChild(r);r.addEventListener('animationend',()=>r.remove())});
+
+// DETAIL + AUTO CAROUSEL
+const detailEl=document.getElementById('detail'),detailBody=document.getElementById('detailBody');
+const carouselImgs=document.getElementById('carouselImgs'),carouselCounter=document.getElementById('carouselCounter'),carouselDots=document.getElementById('carouselDots'),carouselEl=document.getElementById('detailCarousel');
+let currentGallery=[],currentIdx=0,carouselTimer=null,carouselPaused=false;
+
+function buildCarousel(){
+  carouselImgs.innerHTML=currentGallery.map(src=>`<img src="${src}" alt="" loading="lazy">`).join('');
+  carouselDots.innerHTML=currentGallery.map((_,i)=>`<div class="detail-carousel-dot${i===currentIdx?' active':''}" data-idx="${i}"></div>`).join('');
+  carouselDots.querySelectorAll('.detail-carousel-dot').forEach(d=>{d.addEventListener('click',e=>{e.stopPropagation();goTo(parseInt(d.dataset.idx))})});
+  updateCarousel();
+}
+function updateCarousel(){
+  if(currentGallery.length===0)return;
+  carouselImgs.querySelectorAll('img').forEach((img,i)=>img.classList.toggle('active',i===currentIdx));
+  carouselCounter.textContent=`${currentIdx+1}/${currentGallery.length}`;
+  carouselDots.querySelectorAll('.detail-carousel-dot').forEach((d,i)=>d.classList.toggle('active',i===currentIdx));
+}
+function goTo(idx){currentIdx=idx;updateCarousel();resetTimer()}
+function carouselNext(){if(currentGallery.length<2)return;currentIdx=(currentIdx+1)%currentGallery.length;updateCarousel();resetTimer()}
+function carouselPrev(){if(currentGallery.length<2)return;currentIdx=(currentIdx-1+currentGallery.length)%currentGallery.length;updateCarousel();resetTimer()}
+function resetTimer(){clearInterval(carouselTimer);if(!carouselPaused&&currentGallery.length>1){carouselTimer=setInterval(carouselNext,3500)}}
+// Pause on hover
+carouselEl.addEventListener('mouseenter',()=>{carouselPaused=true;clearInterval(carouselTimer)});
+carouselEl.addEventListener('mouseleave',()=>{carouselPaused=false;resetTimer()});
+document.getElementById('carouselNext').addEventListener('click',e=>{e.stopPropagation();carouselNext()});
+document.getElementById('carouselPrev').addEventListener('click',e=>{e.stopPropagation();carouselPrev()});
+// Click on image to advance
+carouselEl.addEventListener('click',e=>{if(e.target.tagName==='IMG')carouselNext()});
+
+function showDetail(key){
+  const d=relations[key]||chars[key]||relations.intro;
+  detailEl.style.setProperty('--accent',d.accent);
+  clearInterval(carouselTimer);carouselPaused=false;
+  currentGallery=d.gallery||[d.img||'./社团.png'];currentIdx=0;buildCarousel();resetTimer();
+  detailBody.innerHTML=`<div class="detail-tag">${d.tag}</div><div class="detail-title">${d.title}</div><div class="detail-jp">${d.jp}</div><div class="detail-body">${d.body}</div>${d.quote?`<div class="detail-quote">${d.quote}</div>`:''}${d.hint?`<div class="detail-hint">${d.hint}</div>`:''}`;
+  for(const[k,c]of Object.entries(cards))c.classList.toggle('active',k===key);
+  document.querySelectorAll('.edge').forEach(el=>el.classList.toggle('active',el.dataset.key===key));
+  const toast=document.getElementById('toast');toast.textContent=d.tag;toast.classList.add('show');clearTimeout(toast._timeout);toast._timeout=setTimeout(()=>toast.classList.remove('show'),1600);
+}showDetail('intro');
+
+// TILT
+if(!isTouch&&!reduce){detailEl.addEventListener('mousemove',e=>{const r=detailEl.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top,cx=r.width/2,cy=r.height/2;detailEl.style.transform=`perspective(800px) rotateX(${((y-cy)/cy)*-5}deg) rotateY(${((x-cx)/cx)*5}deg)`});detailEl.addEventListener('mouseleave',()=>detailEl.style.transform='perspective(800px) rotateX(0deg) rotateY(0deg)')}
+// PARALLAX
+if(!isTouch&&!reduce){graphArea.addEventListener('mousemove',e=>{if(animA)return;const r=graphArea.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;for(const[k,card]of Object.entries(cards)){if(getSlot(k)==='top')continue;card.style.transform=`translate(-50%,-50%) translate(${x*8}px,${y*6}px)`}});graphArea.addEventListener('mouseleave',()=>{for(const[k,card]of Object.entries(cards)){if(getSlot(k)==='top')continue;card.style.transform='translate(-50%,-50%)'}})}
+
+// TIMELINE
+const tl=document.getElementById('timeline');
+phases.forEach((p,i)=>{const el=document.createElement('div');el.className='phase reveal'+(i===0?' open':'');el.innerHTML=`<div class="phase-dot"></div><button class="phase-toggle" aria-expanded="${i===0}"><span class="phase-idx">${p.idx}</span><span class="phase-name">${p.name}</span><span class="phase-jp">${p.jp}</span></button><div class="phase-body"><div class="phase-body-inner"><div class="phase-content"><div class="phase-text">${p.text}</div><div class="phase-img"><img src="${p.img}" loading="lazy" alt="${p.name}"></div></div></div></div>`;tl.appendChild(el);el.querySelector('.phase-toggle').addEventListener('click',()=>{const o=el.classList.toggle('open');el.querySelector('.phase-toggle').setAttribute('aria-expanded',o)})});
+
+// MUSIC — local audio
+const bgm=document.getElementById('bgmAudio'),mt=document.getElementById('musicToggle');let mp=false;
+bgm.src='./bgm.mp3';bgm.volume=0.45;bgm.loop=true;
+async function play(){try{await bgm.play();mp=true;mt.classList.add('playing')}catch(e){}}
+play();
+function wake(){if(!mp){play();if(mp){document.removeEventListener('click',wake);document.removeEventListener('scroll',wake)}}}
+document.addEventListener('click',wake);document.addEventListener('scroll',wake);
+mt.addEventListener('click',e=>{e.stopPropagation();mp?(bgm.pause(),mp=false,mt.classList.remove('playing')):play()});
+
+// REVEAL
+if(reduce)document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in'));
+else{const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.15,rootMargin:'0px 0px -40px 0px'});document.querySelectorAll('.reveal').forEach(el=>io.observe(el))}
+
+// ═══ INTRO SEQUENCE — 樱吹雪缓缓浮现 ═══
+const introPlayed=sessionStorage.getItem('oregairu_intro_v2');
+const introOverlay=document.getElementById('introOverlay'),introTitle=document.getElementById('introTitle'),introSub=document.getElementById('introSub');
+if(!reduce&&!introPlayed){
+  // Hide page content behind petals
+  document.querySelector('.hero').style.opacity='0';
+  document.querySelector('.scene-divider').style.opacity='0';
+  document.querySelector('.graph-stage').style.opacity='0';
+  for(const[k,card]of Object.entries(cards)){card.style.opacity='0';card.classList.add('intro-fly')}
+  stormMode=true;setStormMode(true);
+
+  // 1.5s: title begins to emerge through the dense petals
+  setTimeout(()=>{introTitle.classList.add('visible')},1500);
+  // 2.5s: subtitle emerges
+  setTimeout(()=>{introSub.classList.add('visible')},2500);
+  // 4.5s: petals mostly cleared, overlay fades, title fades out
+  setTimeout(()=>{
+    introOverlay.classList.add('done');
+    introTitle.classList.add('done');
+    introSub.style.opacity='0';introSub.style.transition='opacity 1.5s ease-out';
+    // Page content fades in
+    document.querySelector('.hero').style.transition='opacity 1.2s ease-out .2s';document.querySelector('.hero').style.opacity='1';
+    document.querySelector('.scene-divider').style.transition='opacity .8s ease-out .5s';document.querySelector('.scene-divider').style.opacity='1';
+    document.querySelector('.graph-stage').style.transition='opacity .8s ease-out .8s';document.querySelector('.graph-stage').style.opacity='1';
+    // Cards fly in staggered
+    const slotKeys=[slot.top,slot.bl,slot.br];
+    slotKeys.forEach((key,i)=>{
+      setTimeout(()=>{cards[key].style.opacity='1'},400+i*350);
+      setTimeout(()=>{cards[key].classList.add('done')},1300+i*350);
+    });
+  },4500);
+  // 6.5s: petals thin to normal
+  setTimeout(()=>{setStormMode(false)},6500);
+  // 7.5s: final cleanup
+  setTimeout(()=>{
+    introOverlay.style.display='none';introTitle.style.display='none';introSub.style.display='none';
+    sessionStorage.setItem('oregairu_intro_v2','1');
+  },7500);
+}else{
+  // Already played or reduced motion — skip intro
+  setStormMode(false);stormMode=false;
+  introOverlay.style.display='none';introTitle.style.display='none';introSub.style.display='none';
+  document.querySelector('.hero').style.opacity='1';
+  document.querySelector('.scene-divider').style.opacity='1';
+  document.querySelector('.graph-stage').style.opacity='1';
+  for(const[k,card]of Object.entries(cards)){card.style.opacity='1';card.classList.remove('intro-fly','done')}
+}
+
+layoutCards();addEventListener('resize',()=>{if(!animA)layoutCards()});
+document.querySelectorAll('.edge-line').forEach(ln=>{ln.style.strokeDasharray=String(ln.getTotalLength());ln.style.strokeDashoffset='0';ln.style.opacity='1'});
+</script>
+</body>
+</html>
